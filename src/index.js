@@ -45,6 +45,41 @@ window.addEventListener('load', (event) => {
   document.querySelectorAll('.card').forEach((card) => {
     card.addEventListener('click', () => {
       // TODO: write some code here
+
+      if (memoryGame.pickedCards.length > 1) {
+        // disable clicks after 2 cards are picked
+        return
+      }
+      else {
+        memoryGame.pickedCards.push(card)
+        card.classList.add("turned")
+
+        if (memoryGame.pickedCards.length == 2) // second card
+        {
+          const card1 = memoryGame.pickedCards[0].getAttribute("data-card-name")
+          const card2 = memoryGame.pickedCards[1].getAttribute("data-card-name")
+
+          const isPair = memoryGame.checkIfPair(card1, card2)
+          document.getElementById("pairs-clicked").innerHTML = memoryGame.pairsClicked;
+
+          if (isPair){
+            document.getElementById("pairs-guessed").innerHTML = memoryGame.pairsGuessed;
+            setTimeout(() => {
+              memoryGame.pickedCards = [];
+            }, 1000)
+          }
+          else {
+            setTimeout(() => {
+              memoryGame.pickedCards.forEach(card => card.classList.remove("turned"));
+              memoryGame.pickedCards = [];
+            }, 1000)
+          }
+
+          if (memoryGame.checkIfFinished()) {
+            alert("hayoooooo")
+          }
+        }
+      }
       console.log(`Card clicked: ${card}`);
     });
   });
